@@ -1,4 +1,3 @@
-﻿
 using ShopPro.Common.Data.Repository;
 using ShopPro.Tables.Domain.Entitites;
 
