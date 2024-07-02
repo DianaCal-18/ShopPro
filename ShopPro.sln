@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{25F468
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{A671FE7A-578F-41CE-BB96-1F308DFBF5F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Common.Data", "ShopPro.Common.Data\ShopPro.Common.Data.csproj", "{ACFA8CC5-FA14-467E-9DEF-3D01413DB6CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Common.Data", "ShopPro.Common.Data\ShopPro.Common.Data.csproj", "{ACFA8CC5-FA14-467E-9DEF-3D01413DB6CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{F1C5E675-09FB-4D2C-B9F2-C14E0FD499EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Infraestructure", "ShopPro.Infraestructure\ShopPro.Infraestructure.csproj", "{09B300DE-3207-4887-B5C4-A44262F8F742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Infraestructure", "ShopPro.Infraestructure\ShopPro.Infraestructure.csproj", "{09B300DE-3207-4887-B5C4-A44262F8F742}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tables Management", "Tables Management", "{63B83D6C-7A19-47B1-BF81-95170B2A2ED4}"
 EndProject
@@ -29,9 +29,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{2FC78F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{DBCC44EA-20DA-472C-ABA2-E71B63ED21E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Tables.Application", "ShopPro.Categories.Application\ShopPro.Tables.Application.csproj", "{1F74BDA6-B90D-483A-A06D-9034194492E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Tables.Application", "ShopPro.Categories.Application\ShopPro.Tables.Application.csproj", "{1F74BDA6-B90D-483A-A06D-9034194492E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Tables.Domain", "ShopPro.Categories.Domain\ShopPro.Tables.Domain.csproj", "{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Tables.Domain", "ShopPro.Categories.Domain\ShopPro.Tables.Domain.csproj", "{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Tables.Persistence", "ShopPro.Tables.Persistence\ShopPro.Tables.Persistence.csproj", "{7314B955-9721-4147-A676-470FA5BCC967}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopPro.Tables.Api", "ShopPro.Tables.Api\ShopPro.Tables.Api.csproj", "{549836D1-F64A-4263-AB5D-17D45F9E09DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +59,14 @@ Global
 		{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7314B955-9721-4147-A676-470FA5BCC967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7314B955-9721-4147-A676-470FA5BCC967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7314B955-9721-4147-A676-470FA5BCC967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7314B955-9721-4147-A676-470FA5BCC967}.Release|Any CPU.Build.0 = Release|Any CPU
+		{549836D1-F64A-4263-AB5D-17D45F9E09DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549836D1-F64A-4263-AB5D-17D45F9E09DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549836D1-F64A-4263-AB5D-17D45F9E09DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549836D1-F64A-4263-AB5D-17D45F9E09DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +86,8 @@ Global
 		{DBCC44EA-20DA-472C-ABA2-E71B63ED21E0} = {63B83D6C-7A19-47B1-BF81-95170B2A2ED4}
 		{1F74BDA6-B90D-483A-A06D-9034194492E0} = {07E475F8-FD21-4286-891C-DEA27E24B996}
 		{634A12A8-8BA6-4235-8BD3-B1E5A3AB0250} = {2FC78F1B-E1F2-4415-8972-AFBEEC778A96}
+		{7314B955-9721-4147-A676-470FA5BCC967} = {DBCC44EA-20DA-472C-ABA2-E71B63ED21E0}
+		{549836D1-F64A-4263-AB5D-17D45F9E09DE} = {640C52DF-06B2-4746-B07E-7554C5BF2367}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A0496AC-B7C1-4F38-B86C-C07FD1E40CA8}
