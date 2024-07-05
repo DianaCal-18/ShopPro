@@ -1,4 +1,3 @@
-﻿
 using ShopPro.Tables.Domain.Entitites;
 using ShopPro.Tables.Domain.Interfaces;
 using System.Linq.Expressions;

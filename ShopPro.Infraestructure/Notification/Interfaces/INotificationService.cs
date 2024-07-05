@@ -1,5 +1,4 @@
 ﻿
-
 using ShopPro.Infraestructure.Base;
 
 namespace ShopPro.Infraestructure.Notification.Interfaces

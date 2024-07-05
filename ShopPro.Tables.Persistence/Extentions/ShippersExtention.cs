@@ -1,13 +1,9 @@
-﻿
-using ShopPro.Tables.Application.Dtos.CategoriesDtos;
-using ShopPro.Tables.Application.Dtos.ShippersDtos;
-using ShopPro.Tables.Domain.Entitites;
 
 namespace ShopPro.Tables.Persistence.Extentions
 {
     public static class ShippersExtention
     {
-        public static ShippersDto ConvertShipEntityToShippersDto(this ShippersEntity shippers)
+        /*  public static ShippersDto ConvertShipEntityToShippersDto(this ShippersEntity shippers)
         {
             ShippersDto shippersDto = new ShippersDto()
             {

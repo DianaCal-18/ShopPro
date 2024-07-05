@@ -2,7 +2,6 @@
 using ShopPro.Tables.Domain.Interfaces;
 using ShopPro.Tables.Persistence.Context;
 using ShopPro.Tables.Persistence.Exceptions;
-using ShopPro.Tables.Persistence.Extentions;
 using System.Linq.Expressions;
 
 namespace ShopPro.Tables.Persistence.Repositories

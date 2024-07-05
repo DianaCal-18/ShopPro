@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using ShopPro.Tables.Domain.Entitites;
 
 namespace ShopPro.Tables.Persistence.Context

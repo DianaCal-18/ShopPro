@@ -1,8 +1,4 @@
 ﻿
-using ShopPro.Tables.Application.Dtos.CategoriesDtos;
-using ShopPro.Tables.Domain.Entitites;
-using ShopPro.Tables.Persistence.Models;
-
 namespace ShopPro.Tables.Persistence.Extentions
 {
     public static class CategoriesExtention

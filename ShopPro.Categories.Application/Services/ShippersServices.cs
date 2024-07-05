@@ -1,4 +1,3 @@
-﻿
 using ShopPro.Categories.Application.Base;
 using ShopPro.Tables.Application.Dtos.ShippersDtos;
 using ShopPro.Tables.Application.Interfaces;
