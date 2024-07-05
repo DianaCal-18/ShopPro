@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShopPro.Categories.Application\ShopPro.Tables.Application.csproj" />
     <ProjectReference Include="..\ShopPro.Categories.Domain\ShopPro.Tables.Domain.csproj" />
   </ItemGroup>
 

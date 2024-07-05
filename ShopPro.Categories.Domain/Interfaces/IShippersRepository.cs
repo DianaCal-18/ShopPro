@@ -1,14 +1,10 @@
 ﻿using ShopPro.Common.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ShopPro.Tables.Domain.Entitites;
 
 namespace ShopPro.Tables.Domain.Interfaces
 {
-    public interface IShippersRepository : IBaseRepository<IShippersRepository, int>
+    public interface IShippersRepository : IBaseRepository<ShippersEntity, int>
     {
-        List<Tables.Domain.Entitites.ShippersEntity> GetCategoriesById(int categoryid);
+        List<Tables.Domain.Entitites.ShippersEntity> GetShippersById(int shipperid);
     }
 }

@@ -1,44 +1,98 @@
-using ShopPro.Tables.Domain.Entitites;
+﻿using ShopPro.Tables.Domain.Entitites;
 using ShopPro.Tables.Domain.Interfaces;
+using ShopPro.Tables.Persistence.Context;
+using ShopPro.Tables.Persistence.Exceptions;
 using System.Linq.Expressions;
 
 namespace ShopPro.Tables.Persistence.Repositories
 {
     public class ShippersRepository : IShippersRepository
     {
-        public bool Exists(Expression<Func<IShippersRepository, bool>> filter)
+        private readonly ShopContext shopContext;
+
+        public ShippersRepository(ShopContext shopContext)
         {
-            throw new NotImplementedException();
+            this.shopContext = shopContext;
         }
 
-        public List<IShippersRepository> GetAll()
+        public bool Exists(Expression<Func<ShippersEntity, bool>> filter)
         {
-            throw new NotImplementedException();
+            return this.shopContext.Shippers.Any(filter);
         }
 
-        public List<ShippersEntity> GetCategoriesById(int categoryid)
+        public List<ShippersEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return this.shopContext.Shippers.ToList();
         }
 
-        public IShippersRepository GetEntityByID(int id)
+
+         public List<ShippersEntity> GetShippersById(int shipperid)
+         {
+             var shippers = this.shopContext.Shippers.Find(shipperid);
+             if (shippers == null)
+             {
+                 throw new ShippersExceptions($"ID no encontrado, {shipperid}");
+             }
+
+             var shippersList = new List<ShippersEntity> { shippers };
+             return shippersList;
+         } 
+        
+        public ShippersEntity GetEntityByID(int id)
         {
-            throw new NotImplementedException();
+            var shippers = this.shopContext.Shippers.Find(id);
+            if(shippers == null)
+            {
+                throw new ShippersExceptions($"ID no encontrado, {id}");
+            }
+
+            return shippers;
         }
 
-        public void Remove(IShippersRepository entity)
+        public void Remove(ShippersEntity entity)
         {
-            throw new NotImplementedException();
+            var shippers = this.shopContext.Shippers.Find(entity.id);
+            shippers = ValidarExistencia(entity.id);
+            this.shopContext.Shippers.Remove(shippers);
+            this.shopContext.SaveChanges();
+
+
         }
 
-        public void Save(IShippersRepository entity)
+        public void Save(ShippersEntity entity)
         {
-            throw new NotImplementedException();
+           if (entity == null)
+            {
+                throw new ShippersExceptions(nameof(entity));
+            }
+
+            this.shopContext.Shippers.Add(entity);
+            this.shopContext.SaveChanges();
         }
 
-        public void Update(IShippersRepository entity)
+        public void Update(ShippersEntity entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+            {
+                throw new ShippersExceptions(nameof(entity));
+            }
+            var shippers = this.shopContext.Shippers.Find(entity.id);
+            if(shippers == null)
+            {
+                throw new ShippersExceptions($"ID no encontrado {entity.id}");
+            }
+
+            shippers.companyname = entity.companyname;
+            shippers.phone = shippers.phone;
+
+            this.shopContext.Shippers.Update(shippers);
+            this.shopContext.SaveChanges();
+        }
+
+        private ShippersEntity ValidarExistencia(int shipperid)
+        {
+            var shippers = this.shopContext.Shippers.Find(shipperid);
+            return shippers;
         }
     }
 }

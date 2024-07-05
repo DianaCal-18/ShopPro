@@ -15,12 +15,13 @@ namespace ShopPro.Tables.Persistence.Repositories
         }
         public bool Exists(Expression<Func<CategoriesEntity, bool>> filter)
         {
-            throw new NotImplementedException();
+            return this.shopContext.Categories.Any(filter);
         }
 
         public List<CategoriesEntity> GetAll()
         {
           return this.shopContext.Categories.ToList();
+                 
         }
 
         public List<CategoriesEntity> GetCategoriesById(int categoryid)
@@ -30,8 +31,9 @@ namespace ShopPro.Tables.Persistence.Repositories
             {
                 throw new CategoriesExceptions($"ID no encontrado, {categoryid}");
             }
+            var categoryList = new List<CategoriesEntity> { category };
 
-            return new List<CategoriesEntity> { category };
+            return categoryList;
 
         }
 
@@ -48,17 +50,48 @@ namespace ShopPro.Tables.Persistence.Repositories
 
         public void Remove(CategoriesEntity entity)
         {
-            throw new NotImplementedException();
+            var category = this.shopContext.Categories.Find(entity.id);
+            category = ValidarExistencia(entity.id);
+            this.shopContext.Categories.Remove(category);
+            this.shopContext.SaveChanges();
         }
 
         public void Save(CategoriesEntity entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+            {
+                throw new CategoriesExceptions(nameof(entity));
+            }
+
+            this.shopContext.Categories.Add(entity);
+            this.shopContext.SaveChanges();
         }
 
         public void Update(CategoriesEntity entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+            {
+                throw new CategoriesExceptions(nameof(entity));
+            }
+
+            var category = this.shopContext.Categories.Find(entity.id);
+
+            if (category == null)
+            {
+                throw new CategoriesExceptions($"ID no encontrado, {entity.id}");
+            }
+
+            category.categoryname = entity.categoryname;
+            category.description = entity.description;
+
+            this.shopContext.Categories.Update(category);
+            this.shopContext.SaveChanges();
+        }
+
+        private CategoriesEntity ValidarExistencia(int categoryid)
+        {
+            var categories = this.shopContext.Categories.Find(categoryid);
+            return categories;
         }
     }
 }
