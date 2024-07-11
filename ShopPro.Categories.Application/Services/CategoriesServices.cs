@@ -70,7 +70,6 @@ namespace ShopPro.Tables.Application.Services
                 result.Success = false;
                 result.Message = "Ocurrió un error eliminando la categoría.";
                 logger.LogError(ex, result.Message);
-
             }
             return result;
         }

@@ -55,8 +55,6 @@ namespace ShopPro.Tables.Persistence.Repositories
             shippers = ValidarExistencia(entity.id);
             this.shopContext.Shippers.Remove(shippers);
             this.shopContext.SaveChanges();
-
-
         }
 
         public void Save(ShippersEntity entity)
