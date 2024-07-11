@@ -3,17 +3,19 @@ using ShopPro.Infraestructure.Logger.Interfaces;
 using ShopPro.Tables.Application.Dtos.ShippersDtos;
 using ShopPro.Tables.Application.Extensions;
 using ShopPro.Tables.Application.Interfaces;
+using ShopPro.Tables.Domain.Entitites;
+using ShopPro.Tables.Domain.Interfaces;
 
 namespace ShopPro.Tables.Application.Services
 {
     public class ShippersServices : IShippersServices
     {
-        private readonly IShippersServices shippersServices;
+        private readonly IShippersRepository shippersRepository;
         private readonly ILoggerService logger;
 
-        public ShippersServices(IShippersServices shippersServices, ILoggerService logger)
+        public ShippersServices(IShippersRepository shippersRepository, ILoggerService logger)
         {
-            this.shippersServices = shippersServices;
+            this.shippersRepository = shippersRepository;
             this.logger = logger;
         }
         public ServiceResult GetShippers()
@@ -21,13 +23,13 @@ namespace ShopPro.Tables.Application.Services
             var result = new ServiceResult();
             try
             {
-                result.Data = shippersServices.GetShippers();
+                result.Data = shippersRepository.GetAll();
                 result.Success = true;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Ocurrió un error obteniendo las categorías.";
+                result.Message = "Ocurrió un error obteniendo las shippers.";
                 logger.LogError(ex, result.Message);
 
             }
@@ -39,13 +41,13 @@ namespace ShopPro.Tables.Application.Services
             var result = new ServiceResult();
             try
             {
-                result.Data = shippersServices.GetShippersById(shipperid);
+                result.Data = shippersRepository.GetShippersById(shipperid);
                 result.Success = true;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Ocurrió un error obteniendo la categoría.";
+                result.Message = "Ocurrió un error obteniendo la shipper.";
                 logger.LogError(ex, result.Message);
             }
             return result;
@@ -59,15 +61,26 @@ namespace ShopPro.Tables.Application.Services
                 if (shippersRemove == null)
                 {
                     result.Success = false;
+                    result.Message = "Este campo es requerido. ";
                     return result;
                 }
-                shippersServices.RemoveShippers(shippersRemove);
+
+                var shippersEntity = new ShippersEntity
+                {
+                    id = shippersRemove.shipperid,
+                    companyname = shippersRemove.companyname,
+                    phone = shippersRemove.phone
+                    
+
+                };
+
+                this.shippersRepository.Remove(shippersEntity);
                 result.Success = true;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Ocurrió un error eliminando la categoría.";
+                result.Message = "Ocurrió un error eliminando shippers. ";
                 logger.LogError(ex, result.Message);
             }
             return result;
@@ -75,43 +88,60 @@ namespace ShopPro.Tables.Application.Services
 
         public ServiceResult SaveShippers(ShippersDto shippersSave)
         {
-            var result = EntityExtension<ShippersDto>.Validate(shippersSave);
-            if (!result.Success)
-            {
-                return result;
-            }
+            ServiceResult result = new ServiceResult();
 
             try
             {
-                shippersServices.SaveShippers(shippersSave);
+                result = shippersSave.IsValidShippers();
+                if (!result.Success)
+                {
+                    return result;
+                }
+
+                var shippersEntity = new ShippersEntity
+                {
+                    id = shippersSave.shipperid,
+                    companyname = shippersSave.companyname,
+                    phone = shippersSave.phone
+                };
+
+                this.shippersRepository.Save(shippersEntity);
                 result.Success = true;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Ocurrió un error guardando la categoría.";
+                result.Message = "Ocurrió un error guardando la shipper.";
                 logger.LogError(ex, result.Message);
             }
-            return result; ;
+            return result;
         }
 
         public ServiceResult UpdateShippers(ShippersDto shippersUpdate)
         {
-            var result = EntityExtension<ShippersDto>.Validate(shippersUpdate);
-            if (!result.Success)
+            ServiceResult result = new ServiceResult();
+          try
             {
-                return result;
-            }
+                result = shippersUpdate.IsValidShippers();
+                if (!result.Success)
+                {
+                    return result;
+                }
 
-            try
-            {
-                shippersServices.UpdateShippers(shippersUpdate);
+                var shippersEntity = new ShippersEntity
+                {
+                    id = shippersUpdate.shipperid,
+                    companyname = shippersUpdate.companyname,
+                    phone = shippersUpdate.phone
+                };
+
+                this.shippersRepository.Save(shippersEntity);
                 result.Success = true;
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Ocurrió un error actualizando la categoría.";
+                result.Message = "Ocurrió un error actualizando la shipper.";
                 logger.LogError(ex, result.Message);
             }
             return result;

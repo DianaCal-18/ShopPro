@@ -22,7 +22,9 @@ namespace ShopPro.Tables.Persistence.Repositories
 
         public List<ShippersEntity> GetAll()
         {
-            return this.shopContext.Shippers.ToList();
+            return this.shopContext.Shippers
+                     .OrderByDescending(c => c.id)
+                     .ToList();
         }
 
 

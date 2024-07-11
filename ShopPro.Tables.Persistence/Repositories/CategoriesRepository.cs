@@ -1,4 +1,5 @@
-﻿using ShopPro.Tables.Domain.Entitites;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopPro.Tables.Domain.Entitites;
 using ShopPro.Tables.Domain.Interfaces;
 using ShopPro.Tables.Persistence.Context;
 using ShopPro.Tables.Persistence.Exceptions;
@@ -20,8 +21,10 @@ namespace ShopPro.Tables.Persistence.Repositories
 
         public List<CategoriesEntity> GetAll()
         {
-          return this.shopContext.Categories.ToList();
-                 
+               return this.shopContext.Categories
+                         .OrderByDescending(c => c.id) 
+                         .ToList();
+
         }
 
         public List<CategoriesEntity> GetCategoriesById(int categoryid)
@@ -54,6 +57,7 @@ namespace ShopPro.Tables.Persistence.Repositories
             category = ValidarExistencia(entity.id);
             this.shopContext.Categories.Remove(category);
             this.shopContext.SaveChanges();
+
         }
 
         public void Save(CategoriesEntity entity)

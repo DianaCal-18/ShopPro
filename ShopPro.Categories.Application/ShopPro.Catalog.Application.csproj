@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShopPro.Categories.Domain\ShopPro.Tables.Domain.csproj" />
+    <ProjectReference Include="..\ShopPro.Categories.Domain\ShopPro.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\ShopPro.Infraestructure\ShopPro.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>
