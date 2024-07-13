@@ -77,13 +77,13 @@ namespace ShopPro.Tables.Persistence.Repositories
                 throw new ShippersExceptions(nameof(entity));
             }
             var shippers = this.shopContext.Shippers.Find(entity.id);
-            if(shippers == null)
+            if (shippers == null)
             {
                 throw new ShippersExceptions($"ID no encontrado {entity.id}");
             }
 
             shippers.companyname = entity.companyname;
-            shippers.phone = shippers.phone;
+            shippers.phone = entity.phone;
 
             this.shopContext.Shippers.Update(shippers);
             this.shopContext.SaveChanges();

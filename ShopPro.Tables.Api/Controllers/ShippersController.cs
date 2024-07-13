@@ -60,7 +60,7 @@ namespace ShopPro.Catalog.Api.Controllers
         }
 
         [HttpPost("UpdateShippers")]
-        public IActionResult Put(int id, [FromBody] ShippersDto shippersDto)
+        public IActionResult Put(ShippersDto shippersDto)
         {
             var result = this.shippersServices.UpdateShippers(shippersDto);
             if (!result.Success)
