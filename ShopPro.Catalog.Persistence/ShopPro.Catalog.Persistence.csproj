@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShopPro.Categories.Domain\ShopPro.Catalog.Domain.csproj" />
+    <ProjectReference Include="..\ShopPro.Catalog.Domain\ShopPro.Catalog.Domain.csproj" />
   </ItemGroup>
 
 </Project>

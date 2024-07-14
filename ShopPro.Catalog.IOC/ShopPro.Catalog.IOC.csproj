@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShopPro.Categories.Application\ShopPro.Catalog.Application.csproj" />
-    <ProjectReference Include="..\ShopPro.Tables.Persistence\ShopPro.Catalog.Persistence.csproj" />
+    <ProjectReference Include="..\ShopPro.Catalog.Application\ShopPro.Catalog.Application.csproj" />
+    <ProjectReference Include="..\ShopPro.Catalog.Persistence\ShopPro.Catalog.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
