@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShopPro.Web.Models.CategoriesModels;
 using ShopPro.Web.Results.CategoriesResult;
+using System.Text;
 
 namespace ShopPro.Web.Controllers
 {
@@ -53,7 +55,7 @@ namespace ShopPro.Web.Controllers
         {
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Categories/GetCategoryById?id={id}";
+                var url = $"http://localhost:5218/api/Categories/GetCategoriesById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -71,20 +73,21 @@ namespace ShopPro.Web.Controllers
                             ViewBag.Message = message;
                             return View();
                         }
-            
-                        var category = jsonObject["data"].ToObject<CategoriesUpdateModel>(); 
 
-                        if (category == null)
+                        var data = jsonObject["data"].ToObject<List<CategoriesUpdateModel>>();
+
+                        if (data == null || !data.Any())
                         {
-                            ViewBag.Message = "Category not found.";
+                            ViewBag.Message = "Shipper no encontrado.";
                             return View();
                         }
 
-                        return View(category);
+                        var categories = data.FirstOrDefault();
+                        return View(categories);
                     }
                     else
                     {
-                        ViewBag.Message = "Error al obtener la categoría.";
+                        ViewBag.Message = "Error al obtener el shipper.";
                         return View();
                     }
                 }
@@ -113,10 +116,11 @@ namespace ShopPro.Web.Controllers
 
                     using (var response = await httpClient.PostAsJsonAsync<CategoriesSaveModel>(url, saveModel))
                     {
+
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
+                            CreationUser(saveModel);
                             string apiResponse = await response.Content.ReadAsStringAsync();
-
                             saveResult = JsonConvert.DeserializeObject<CategoriesSaveResult>(apiResponse);
 
                             if (!saveResult.success)
@@ -141,45 +145,50 @@ namespace ShopPro.Web.Controllers
         }
 
         // GET: CategoriesController/Edit/5
+
         public async Task<ActionResult> Edit(int id)
         {
-            CategoriesGetResult categoriesGetResult = new CategoriesGetResult();
-
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Categories/GetCategoriesById?id={id}";
+                var url = $"http://localhost:5218/api/Shippers/GetShippersById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
-                        categoriesGetResult = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
+                        var jsonObject = JObject.Parse(apiResponse);
 
-                        if (!categoriesGetResult.success)
+                        var success = jsonObject["success"].Value<bool>();
+                        var message = jsonObject["message"].Value<string>();
+
+                        if (!success)
                         {
-                            ViewBag.Message = categoriesGetResult.message;
+                            ViewBag.Message = message;
                             return View();
                         }
+
+                        var data = jsonObject["data"].ToObject<List<CategoriesUpdateModel>>();
+
+                        if (data == null || !data.Any())
+                        {
+                            ViewBag.Message = "categoy no encontrado.";
+                            return View();
+                        }
+
+                        var categories = data.FirstOrDefault();
+                        return View(categories);
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Error al obtener la category.";
+                        return View();
                     }
                 }
             }
-
-            if (categoriesGetResult.data == null)
-            {
-                ViewBag.Message = "Category not found.";
-                return View();
-            }
-
-            CategoriesUpdateModel updateModel = new CategoriesUpdateModel
-            {
-                categoryid = categoriesGetResult.data.id,
-                categoryname = categoriesGetResult.data.categoryname,
-                description = categoriesGetResult.data.description,
-            };
-
-            return View(updateModel);
         }
+
+
 
         // POST: CategoriesController/Edit/5
         [HttpPost]
@@ -188,40 +197,60 @@ namespace ShopPro.Web.Controllers
         {
             try
             {
-                CategoriesGetResult categoriesGetResult = new CategoriesGetResult();
-
                 using (var httpClient = new HttpClient(this.httpClientHandler))
                 {
                     var url = "http://localhost:5218/api/Categories/UpdateCategories";
+                    var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
 
-                    using (var response = await httpClient.PutAsJsonAsync(url, updateModel))
+                    using (var response = await httpClient.PutAsync(url, content))
                     {
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
+                            ModifyUser(updateModel);
                             string apiResponse = await response.Content.ReadAsStringAsync();
-                            categoriesGetResult = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
+                            var GetResult = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
 
-                            if (!categoriesGetResult.success)
+                            if (!GetResult.success)
                             {
-                                ViewBag.Message = categoriesGetResult.message;
+                                ViewBag.Message = GetResult.message;
                                 return View(updateModel);
                             }
                         }
                         else
                         {
-                            ViewBag.Message = "Error en la actualización de la categoría.";
+                            ViewBag.Message = "Error en la actualización del shipper.";
                             return View(updateModel);
                         }
                     }
-                }
 
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                ViewBag.Message = "Error inesperado.";
+                ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View(updateModel);
             }
+     
+         
+        
+    }
+
+
+        public void CreationUser(CategoriesSaveModel saveModel)
+        {
+            saveModel.creation_date = DateTime.Now;
+            saveModel.creation_user = 2;
+        }
+
+        public void ModifyUser(CategoriesUpdateModel updateModel)
+        {
+            updateModel.modify_date = DateTime.Now;
+            updateModel.modify_user = 1;
         }
     }
+
+
+
+
 }

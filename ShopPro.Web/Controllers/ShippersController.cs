@@ -78,15 +78,15 @@ namespace ShopPro.Web.Controllers
                             return View();
                         }
 
-                        var dataArray = jsonObject["data"].ToObject<List<ShippersModel>>();
+                        var data = jsonObject["data"].ToObject<List<ShippersModel>>();
 
-                        if (dataArray == null || !dataArray.Any())
+                        if (data == null || !data.Any())
                         {
                             ViewBag.Message = "Shipper no encontrado.";
                             return View();
                         }
 
-                        var shipper = dataArray.FirstOrDefault();
+                        var shipper = data.FirstOrDefault();
                         return View(shipper);
                     }
                     else
@@ -168,15 +168,15 @@ namespace ShopPro.Web.Controllers
                             return View(); 
                         }
 
-                        var dataArray = jsonObject["data"].ToObject<List<ShippersModel>>();
+                        var data = jsonObject["data"].ToObject<List<ShippersModel>>();
 
-                        if (dataArray == null || !dataArray.Any())
+                        if (data == null || !data.Any())
                         {
                             ViewBag.Message = "Shipper no encontrado.";
                             return View(); 
                         }
 
-                        var shipper = dataArray.FirstOrDefault();
+                        var shipper = data.FirstOrDefault();
                         return View(shipper); 
                     }
                     else
@@ -205,11 +205,11 @@ namespace ShopPro.Web.Controllers
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             string apiResponse = await response.Content.ReadAsStringAsync();
-                            var shippersGetResult = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
+                            var GetResult = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
 
-                            if (!shippersGetResult.success)
+                            if (!GetResult.success)
                             {
-                                ViewBag.Message = shippersGetResult.message;
+                                ViewBag.Message = GetResult.message;
                                 return View(updateModel);
                             }
                         }
