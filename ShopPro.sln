@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Catalog.Persistence
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Catalog.Api", "ShopPro.Catalog.Api\ShopPro.Catalog.Api.csproj", "{23EA62A5-71C7-4A7B-9807-E55C652819E8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopPro.Web", "ShopPro.Web\ShopPro.Web.csproj", "{3548D214-6ED4-47AF-92DD-7E219C01B15D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{23EA62A5-71C7-4A7B-9807-E55C652819E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23EA62A5-71C7-4A7B-9807-E55C652819E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23EA62A5-71C7-4A7B-9807-E55C652819E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3548D214-6ED4-47AF-92DD-7E219C01B15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3548D214-6ED4-47AF-92DD-7E219C01B15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3548D214-6ED4-47AF-92DD-7E219C01B15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3548D214-6ED4-47AF-92DD-7E219C01B15D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{67CDD988-1B43-4D4B-858D-90D1443648AA} = {DDD97181-DA1B-4A0D-B948-DDD33EA43D1B}
 		{3EC94487-F1E8-4691-BDE1-43A6727B1CB7} = {DBCC44EA-20DA-472C-ABA2-E71B63ED21E0}
 		{23EA62A5-71C7-4A7B-9807-E55C652819E8} = {640C52DF-06B2-4746-B07E-7554C5BF2367}
+		{3548D214-6ED4-47AF-92DD-7E219C01B15D} = {A8FAB994-ADE9-4FDF-B1BB-CF70A74CCD94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A0496AC-B7C1-4F38-B86C-C07FD1E40CA8}

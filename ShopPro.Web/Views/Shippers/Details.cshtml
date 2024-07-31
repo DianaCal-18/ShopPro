@@ -1,0 +1,35 @@
+﻿@model ShopPro.Web.Models.ShippersModels.ShippersModel
+
+@{
+    ViewBag.Title = "Shipper Details";
+}
+
+<h2>Shipper Details</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Shipper ID
+        </dt>
+        <dd class="col-sm-10">
+            @Model.id
+        </dd>
+        <dt class="col-sm-2">
+            Company Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.companyname
+        </dd>
+        <dt class="col-sm-2">
+            Phone
+        </dt>
+        <dd class="col-sm-10">
+            @Model.phone
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
