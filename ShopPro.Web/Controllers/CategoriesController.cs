@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShopPro.Web.Models.CategoriesModels;
@@ -11,6 +10,7 @@ namespace ShopPro.Web.Controllers
     public class CategoriesController : Controller
     {
         private readonly HttpClientHandler httpClientHandler;
+        private const string BaseUrl = "http://localhost:5218/api/Categories/";
 
         public CategoriesController()
         {
@@ -28,7 +28,7 @@ namespace ShopPro.Web.Controllers
 
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = "http://localhost:5218/api/Categories/GetCategories";
+                var url = $"{BaseUrl}GetCategories";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -55,7 +55,7 @@ namespace ShopPro.Web.Controllers
         {
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Categories/GetCategoriesById?id={id}";
+                var url = $"{BaseUrl}GetCategoriesById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -112,7 +112,7 @@ namespace ShopPro.Web.Controllers
 
                 using (var httpClient = new HttpClient(this.httpClientHandler))
                 {
-                    var url = "http://localhost:5218/api/Categories/SaveCategories";
+                    var url = $"{BaseUrl}SaveCategories";
 
                     using (var response = await httpClient.PostAsJsonAsync<CategoriesSaveModel>(url, saveModel))
                     {
@@ -150,7 +150,7 @@ namespace ShopPro.Web.Controllers
         {
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Shippers/GetShippersById?id={id}";
+                var url = $"{BaseUrl}GetCategoriesById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -199,7 +199,7 @@ namespace ShopPro.Web.Controllers
             {
                 using (var httpClient = new HttpClient(this.httpClientHandler))
                 {
-                    var url = "http://localhost:5218/api/Categories/UpdateCategories";
+                    var url = $"{BaseUrl}UpdateCategories";
                     var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
 
                     using (var response = await httpClient.PutAsync(url, content))

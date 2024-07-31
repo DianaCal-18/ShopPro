@@ -11,6 +11,7 @@ namespace ShopPro.Web.Controllers
     public class ShippersController : Controller
     {
         private readonly HttpClientHandler httpClientHandler;
+        private const string BaseUrl = "http://localhost:5218/api/Shippers/";
 
         public ShippersController()
         {
@@ -28,7 +29,7 @@ namespace ShopPro.Web.Controllers
 
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = "http://localhost:5218/api/Shippers/GetShippers";
+                var url = $"{BaseUrl}GetShippers";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -59,7 +60,7 @@ namespace ShopPro.Web.Controllers
         {
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Shippers/GetShippersById?id={id}";
+                var url = $"{BaseUrl}GetShippersById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -115,7 +116,7 @@ namespace ShopPro.Web.Controllers
 
                 using (var httpClient = new HttpClient(this.httpClientHandler))
                 {
-                    var url = "http://localhost:5218/api/Shippers/SaveShippers";
+                    var url = $"{BaseUrl}SaveShippers";
 
                     using (var response = await httpClient.PostAsJsonAsync<ShippersModel>(url, saveModel))
                     {
@@ -150,7 +151,7 @@ namespace ShopPro.Web.Controllers
         {
             using (var httpClient = new HttpClient(this.httpClientHandler))
             {
-                var url = $"http://localhost:5218/api/Shippers/GetShippersById?id={id}";
+                var url = $"{BaseUrl}GetShippersById?id={id}";
 
                 using (var response = await httpClient.GetAsync(url))
                 {
@@ -197,7 +198,7 @@ namespace ShopPro.Web.Controllers
             {
                 using (var httpClient = new HttpClient(this.httpClientHandler))
                 {
-                    var url = "http://localhost:5218/api/Shippers/UpdateShippers";
+                    var url = $"{BaseUrl}UpdateShippers";
                     var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
 
                     using (var response = await httpClient.PutAsync(url, content))
