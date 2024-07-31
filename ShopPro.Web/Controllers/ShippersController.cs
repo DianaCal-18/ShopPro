@@ -1,55 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ShopPro.Web.Models.ShippersModels;
-using ShopPro.Web.Results.ShippersResult;
-using System.Net.Http.Json;
-using System.Text;
+using ShopPro.Web.Services.IServices;
+
 
 namespace ShopPro.Web.Controllers
 {
     public class ShippersController : Controller
     {
-        private readonly HttpClientHandler httpClientHandler;
-        private const string BaseUrl = "http://localhost:5218/api/Shippers/";
+        private readonly IShippersService _shippersService;
 
-        public ShippersController()
+        public ShippersController(IShippersService shippersService)
         {
-            this.httpClientHandler = new HttpClientHandler();
-            this.httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
-            {
-                return true;
-            };
+            _shippersService = shippersService;
         }
 
         // GET: ShippersController
         public async Task<ActionResult> Index()
         {
-            ShippersGetListResult shippersGetList = new ShippersGetListResult();
+            var shippersGetList = await _shippersService.GetList();
 
-            using (var httpClient = new HttpClient(this.httpClientHandler))
+            if (!shippersGetList.success)
             {
-                var url = $"{BaseUrl}GetShippers";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        shippersGetList = JsonConvert.DeserializeObject<ShippersGetListResult>(apiResponse);
-
-                        if (!shippersGetList.success)
-                        {
-                            ViewBag.Message = shippersGetList.message;
-                            return View();
-                        }
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener los shippers.";
-                        return View();
-                    }
-                }
+                ViewBag.Message = shippersGetList.message;
+                return View();
             }
 
             return View(shippersGetList.data);
@@ -58,46 +31,19 @@ namespace ShopPro.Web.Controllers
         // GET: ShippersController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
+
+            var categoriesGetResult = await _shippersService.GetById(id);
+
+            if (!categoriesGetResult.success)
             {
-                var url = $"{BaseUrl}GetShippersById?id={id}";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-
-                        var jsonObject = JObject.Parse(apiResponse);
-
-                        var success = jsonObject["success"].Value<bool>();
-                        var message = jsonObject["message"].Value<string>();
-
-                        if (!success)
-                        {
-                            ViewBag.Message = message;
-                            return View();
-                        }
-
-                        var data = jsonObject["data"].ToObject<List<ShippersModel>>();
-
-                        if (data == null || !data.Any())
-                        {
-                            ViewBag.Message = "Shipper no encontrado.";
-                            return View();
-                        }
-
-                        var shipper = data.FirstOrDefault();
-                        return View(shipper);
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener el shipper.";
-                        return View();
-                    }
-                }
+                ViewBag.Message = categoriesGetResult.message;
+                return View();
             }
+
+            return View(categoriesGetResult.data);
+
         }
+            
 
         // GET: ShippersController/Create
         public ActionResult Create()
@@ -105,40 +51,21 @@ namespace ShopPro.Web.Controllers
             return View();
         }
 
-        // POST: ShippersController/Create
+        // POST:ShippersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ShippersModel saveModel)
         {
             try
             {
-                ShippersGetResult saveResult = new ShippersGetResult();
+                var saveResult = await _shippersService.Save(saveModel);
 
-                using (var httpClient = new HttpClient(this.httpClientHandler))
+                if (!saveResult.success)
                 {
-                    var url = $"{BaseUrl}SaveShippers";
-
-                    using (var response = await httpClient.PostAsJsonAsync<ShippersModel>(url, saveModel))
-                    {
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            string apiResponse = await response.Content.ReadAsStringAsync();
-
-                            saveResult = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
-
-                            if (!saveResult.success)
-                            {
-                                ViewBag.Message = saveResult.message;
-                                return View();
-                            }
-                        }
-                        else
-                        {
-                            ViewBag.Message = saveResult.message;
-                            return View();
-                        }
-                    }
+                    ViewBag.Message = saveResult.message;
+                    return View();
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -146,89 +73,48 @@ namespace ShopPro.Web.Controllers
                 return View();
             }
         }
+
         // GET: ShippersController/Edit/5
+
         public async Task<ActionResult> Edit(int id)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
+            var categoriesGetResult = await _shippersService.GetById(id);
+
+            if (!categoriesGetResult.success)
             {
-                var url = $"{BaseUrl}GetShippersById?id={id}";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var jsonObject = JObject.Parse(apiResponse);
-
-                        var success = jsonObject["success"].Value<bool>();
-                        var message = jsonObject["message"].Value<string>();
-
-                        if (!success)
-                        {
-                            ViewBag.Message = message;
-                            return View(); 
-                        }
-
-                        var data = jsonObject["data"].ToObject<List<ShippersModel>>();
-
-                        if (data == null || !data.Any())
-                        {
-                            ViewBag.Message = "Shipper no encontrado.";
-                            return View(); 
-                        }
-
-                        var shipper = data.FirstOrDefault();
-                        return View(shipper); 
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error al obtener el shipper.";
-                        return View(); 
-                    }
-                }
+                ViewBag.Message = categoriesGetResult.message;
+                return View();
             }
+
+            return View(categoriesGetResult.data);
         }
 
-        // POST: ShippersController/Edit/5
-        [HttpPost]
+
+            // POST: ShippersController/Edit/5
+            [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ShippersModel updateModel)
         {
             try
             {
-                using (var httpClient = new HttpClient(this.httpClientHandler))
+                var updateResult = await _shippersService.Update(updateModel);
+
+                if (!updateResult.success)
                 {
-                    var url = $"{BaseUrl}UpdateShippers";
-                    var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
-
-                    using (var response = await httpClient.PutAsync(url, content))
-                    {
-                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                        {
-                            string apiResponse = await response.Content.ReadAsStringAsync();
-                            var GetResult = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
-
-                            if (!GetResult.success)
-                            {
-                                ViewBag.Message = GetResult.message;
-                                return View(updateModel);
-                            }
-                        }
-                        else
-                        {
-                            ViewBag.Message = "Error en la actualización del shipper.";
-                            return View(updateModel);
-                        }
-                    }
-
-                    return RedirectToAction(nameof(Index));
+                    ViewBag.Message = updateResult.message;
+                    return View(updateModel);
                 }
+
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View(updateModel);
             }
+
         }
+
     }
 }
+
