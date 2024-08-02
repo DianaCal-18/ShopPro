@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShopPro.Web.Models.ShippersModels;
 using ShopPro.Web.Services.IServices;
-
+using System;
 
 namespace ShopPro.Web.Controllers
 {
@@ -17,33 +17,46 @@ namespace ShopPro.Web.Controllers
         // GET: ShippersController
         public async Task<ActionResult> Index()
         {
-            var shippersGetList = await _shippersService.GetList();
-
-            if (!shippersGetList.success)
+            try
             {
-                ViewBag.Message = shippersGetList.message;
+                var shippersGetList = await _shippersService.GetList();
+
+                if (!shippersGetList.success)
+                {
+                    ViewBag.Message = shippersGetList.message;
+                    return View();
+                }
+
+                return View(shippersGetList.data);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View();
             }
-
-            return View(shippersGetList.data);
         }
 
         // GET: ShippersController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-
-            var categoriesGetResult = await _shippersService.GetById(id);
-
-            if (!categoriesGetResult.success)
+            try
             {
-                ViewBag.Message = categoriesGetResult.message;
+                var shippersGetResult = await _shippersService.GetById(id);
+
+                if (!shippersGetResult.success)
+                {
+                    ViewBag.Message = shippersGetResult.message;
+                    return View();
+                }
+
+                return View(shippersGetResult.data);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View();
             }
-
-            return View(categoriesGetResult.data);
-
         }
-            
 
         // GET: ShippersController/Create
         public ActionResult Create()
@@ -51,7 +64,7 @@ namespace ShopPro.Web.Controllers
             return View();
         }
 
-        // POST:ShippersController/Create
+        // POST: ShippersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(ShippersModel saveModel)
@@ -68,30 +81,37 @@ namespace ShopPro.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View();
             }
         }
 
         // GET: ShippersController/Edit/5
-
         public async Task<ActionResult> Edit(int id)
         {
-            var categoriesGetResult = await _shippersService.GetById(id);
-
-            if (!categoriesGetResult.success)
+            try
             {
-                ViewBag.Message = categoriesGetResult.message;
+                var shippersGetResult = await _shippersService.GetById(id);
+
+                if (!shippersGetResult.success)
+                {
+                    ViewBag.Message = shippersGetResult.message;
+                    return View();
+                }
+
+                return View(shippersGetResult.data);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View();
             }
-
-            return View(categoriesGetResult.data);
         }
 
-
-            // POST: ShippersController/Edit/5
-            [HttpPost]
+        // POST: ShippersController/Edit/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ShippersModel updateModel)
         {
@@ -112,9 +132,6 @@ namespace ShopPro.Web.Controllers
                 ViewBag.Message = $"Error inesperado: {ex.Message}";
                 return View(updateModel);
             }
-
         }
-
     }
 }
-
