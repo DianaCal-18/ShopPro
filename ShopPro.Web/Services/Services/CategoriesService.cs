@@ -1,7 +1,7 @@
-﻿using ShopPro.Web.Models.CategoriesModels;
+﻿using Newtonsoft.Json;
+using ShopPro.Web.Models.CategoriesModels;
 using ShopPro.Web.Results.CategoriesResult;
 using ShopPro.Web.Services.IServices;
-using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,108 +10,54 @@ namespace ShopPro.Web.Services.Services
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly HttpClientHandler httpClientHandler;
+        private readonly HttpClient _httpClient;
         private const string BaseUrl = "http://localhost:5218/api/Categories/";
 
-        public CategoriesService()
+        public CategoriesService(HttpClient httpClient)
         {
-            this.httpClientHandler = new HttpClientHandler();
-            this.httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
-            {
-                return true;
-            };
+            _httpClient = httpClient;
         }
 
         public async Task<CategoriesGetResult> GetById(int id)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}GetCategoriesById?id={id}";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new CategoriesGetResult { success = false, message = "Error al obtener la categoría." };
-                    }
-                }
-            }
+            var response = await _httpClient.GetAsync($"{BaseUrl}GetCategoriesById?id={id}");
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
         }
 
         public async Task<CategoriesGetListResult> GetList()
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}GetCategories";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<CategoriesGetListResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new CategoriesGetListResult { success = false, message = "Error al obtener la lista de categorías." };
-                    }
-                }
-            }
+            var response = await _httpClient.GetAsync($"{BaseUrl}GetCategories");
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CategoriesGetListResult>(apiResponse);
         }
 
         public async Task<CategoriesGetResult> Save(CategoriesSaveModel saveModel)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}SaveCategories";
-                var content = new StringContent(JsonConvert.SerializeObject(saveModel), Encoding.UTF8, "application/json");
-                CreationUser(saveModel);
-
-                using (var response = await httpClient.PostAsync(url, content))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new CategoriesGetResult { success = false, message = "Error al guardar la categoría." };
-                    }
-                }
-            }
+            var jsonContent = JsonConvert.SerializeObject(saveModel);
+            var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            CreationUser(saveModel);
+            var response = await _httpClient.PostAsync($"{BaseUrl}SaveCategories", contentString);
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
         }
 
         public async Task<CategoriesGetResult> Update(CategoriesUpdateModel updateModel)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}UpdateCategories";
-                var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
-                ModifyUser(updateModel);
-                using (var response = await httpClient.PutAsync(url, content))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new CategoriesGetResult { success = false, message = "Error al actualizar la categoría." };
-                    }
-                }
-            }
+            var jsonContent = JsonConvert.SerializeObject(updateModel);
+            var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            ModifyUser(updateModel);
+            var response = await _httpClient.PutAsync($"{BaseUrl}UpdateCategories", contentString);
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CategoriesGetResult>(apiResponse);
         }
+
+
+
 
         private void CreationUser(CategoriesSaveModel saveModel)
         {

@@ -1,112 +1,55 @@
-﻿using ShopPro.Web.Services.IServices;
-using Newtonsoft.Json;
-using System.Text;
+﻿using Newtonsoft.Json;
+using ShopPro.Web.Services.IServices;
 using ShopPro.Web.Results.ShippersResult;
 using ShopPro.Web.Models.ShippersModels;
+using System.Text;
 
 namespace ShopPro.Web.Services.Services
 {
     public class ShippersService : IShippersService
     {
-        private readonly HttpClientHandler httpClientHandler;
+        private readonly HttpClient _httpClient;
         private const string BaseUrl = "http://localhost:5218/api/Shippers/";
 
-        public ShippersService()
+        public ShippersService(HttpClient httpClient)
         {
-            this.httpClientHandler = new HttpClientHandler();
-            this.httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
-            {
-                return true;
-            };
+            _httpClient = httpClient;
         }
 
         public async Task<ShippersGetResult> GetById(int id)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}GetShippersById?id={id}";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new ShippersGetResult { success = false, message = "Error al obtener la shipper." };
-                    }
-                }
-            }
+            var response = await _httpClient.GetAsync($"{BaseUrl}GetShippersById?id={id}");
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
         }
+
         public async Task<ShippersGetListResult> GetList()
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}GetShippers";
-
-                using (var response = await httpClient.GetAsync(url))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<ShippersGetListResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new ShippersGetListResult { success = false, message = "Error al obtener la lista de shippers." };
-                    }
-                }
-            }
+            var response = await _httpClient.GetAsync($"{BaseUrl}GetShippers");
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ShippersGetListResult>(apiResponse);
         }
 
         public async Task<ShippersGetResult> Save(ShippersModel saveModel)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}SaveShippers";
-                var content = new StringContent(JsonConvert.SerializeObject(saveModel), Encoding.UTF8, "application/json");
-   
-                using (var response = await httpClient.PostAsync(url, content))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new ShippersGetResult { success = false, message = "Error al guardar  el shipper." };
-                    }
-                }
-            }
+            var jsonContent = JsonConvert.SerializeObject(saveModel);
+            var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{BaseUrl}SaveShippers", contentString);
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
         }
 
         public async Task<ShippersGetResult> Update(ShippersModel updateModel)
         {
-            using (var httpClient = new HttpClient(this.httpClientHandler))
-            {
-                var url = $"{BaseUrl}UpdateShippers";
-                var content = new StringContent(JsonConvert.SerializeObject(updateModel), Encoding.UTF8, "application/json");
-                
-                using (var response = await httpClient.PutAsync(url, content))
-                {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
-                        return result;
-                    }
-                    else
-                    {
-                        return new ShippersGetResult { success = false, message = "Error al actualizar el shipper." };
-                    }
-                }
-            }
+            var jsonContent = JsonConvert.SerializeObject(updateModel);
+            var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"{BaseUrl}UpdateShippers", contentString);
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ShippersGetResult>(apiResponse);
         }
     }
 }
